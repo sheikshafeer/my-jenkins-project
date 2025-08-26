@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "Cloning the repository..."
-                git url: 'https://github.com/sheikshafeer/my-jenkins-project.git', branch: 'main'
+                git branch: 'main', credentialsId: 'github-id', url: 'https://github.com/sheikshafeer/my-jenkins-project.git'
                 sh "ls -ltr"
             }
         }
