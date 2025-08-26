@@ -12,6 +12,8 @@ pipeline {
         stage('Setup') {
             steps {
                 sh "pip install -r requirements.txt"
+                sh "pytest"
+                sh "whoami"
             }
         }
     }
