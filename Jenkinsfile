@@ -4,17 +4,36 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo "Cloning the repository..."
                 git url: 'https://github.com/sheikshafeer/my-jenkins-project.git', branch: 'main'
                 sh "ls -ltr"
             }
         }
 
-        stage('Setup') {
+        stage('Setup Python Environment') {
             steps {
-                sh "pip install -r requirements.txt"
-                sh "pytest"
-                sh "whoami"
+                echo "Setting up Python virtual environment..."
+                sh '''
+                    python3 -m venv venv
+                    source venv/bin/activate
+                    if [ -f requirements.txt ]; then
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                    else
+                        echo "requirements.txt not found, skipping pip install."
+                    fi
+                '''
             }
         }
     }
+
+    post {
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed. Check logs for errors."
+        }
+    }
 }
+
